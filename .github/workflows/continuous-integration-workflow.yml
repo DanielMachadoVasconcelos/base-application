@@ -33,7 +33,7 @@ jobs:
         with:
           java-version: 13
       - name: Build and test project
-        run: mvn -f github-actions-java-maven/pom.xml clean verify
+        run: mvn -f pom.xml clean verify
       - name: Upload Maven build artifact
         uses: actions/upload-artifact@v1
         with:
