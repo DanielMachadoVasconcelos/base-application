@@ -9,13 +9,13 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.ead</groupId>
-    <artifactId>demo</artifactId>
+    <artifactId>base-application</artifactId>
     <version>1.0.0.0-SNAPSHOT</version>
     <name>base-application</name>
     <description>Base project for Spring Boot</description>
 
     <properties>
-        <java.version>14</java.version>
+        <java.version>12</java.version>
     </properties>
 
     <dependencies>
@@ -77,6 +77,17 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <finalName>app</finalName>
+                    <mainClass>com.ead.Application</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

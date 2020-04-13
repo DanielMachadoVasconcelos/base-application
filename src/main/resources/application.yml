@@ -1,0 +1,32 @@
+spring:
+  profiles:
+    active: development
+  # Database
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://postgres:5432/postgres
+    username: postgres
+    password: pgpass
+  # JPA properties
+  jpa:
+    hibernate:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    baseline-version: 1
+    sql-migration-prefix: V_
+    password: pgpass
+    user: postgres
+    url: jdbc:postgresql://postgres:5432/postgres
+    connect-retries: 10
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+# Logger configuration
+logging:
+  pattern:
+    console: "[%d] [%-5level] %logger : %msg%n"
+  level:
+    org.springframework: info
+    org.hibernate: info
+# Server configuration
+server:
+  port: 8888 #set your port
