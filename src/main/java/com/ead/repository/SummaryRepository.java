@@ -12,6 +12,6 @@ public interface SummaryRepository extends PagingAndSortingRepository<Summary, S
 
     List<Summary> findAllByStatus(@Param("status") String status);
 
-
+    List<Summary> findAllByCountryCode(@Param("country_code") String countryCode);
 
 }
