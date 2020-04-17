@@ -38,4 +38,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: artifact
-          path: base-application/target/application.jar
+          path: base-application/target/app.jar
