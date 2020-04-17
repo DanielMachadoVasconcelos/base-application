@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: development
   # Database
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -17,7 +15,7 @@ spring:
     password: pgpass
     user: postgres
     url: jdbc:postgresql://postgres:5432/postgres
-    connect-retries: 10
+    connect-retries: 3
   jackson:
     property-naming-strategy: SNAKE_CASE
 # Logger configuration
@@ -30,3 +28,30 @@ logging:
 # Server configuration
 server:
   port: 8888 #set your port
+
+---
+
+spring:
+  profiles: test
+
+  # Database
+  datasource:
+    url: jdbc:h2:mem:DBNAME;MODE=MySQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  flyway:
+    url: "jdbc:h2:mem:DBNAME;MODE=MySQL;INIT=RUNSCRIPT FROM 'classpath:flyway_init.sql'"
+    user: sa
+    password:
+    baseline-on-migrate: true
+
+---
+
+profiles:
+  active: development
+  # Database
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+  flyway:
+    url: jdbc:postgresql://localhost:5432/postgres
