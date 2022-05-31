@@ -2,38 +2,43 @@ version: '3'
 services:
 
   postgres:
-    # For more details on configuring the Postgres Docker image, see:
-    #   https://hub.docker.com/_/postgres/
-    image: postgres:10.3-alpine
-
-    # Expose the default Postgres port on localhost
-    expose:
-      - 5432
-    ports:
-      - '5432:5432'
-    network_mode: bridge
+    image: postgres:14.1-alpine
     container_name: postgres
-
-    environment:
-      POSTGRES_USER: 'postgres'
-      POSTGRES_PASSWORD: 'pgpass'
-      POSTGRES_DB: 'postgres'
-
-    # Copy files from dbinit into the image so that they will be run on boot
+    networks:
+      - integration-test
     volumes:
-      - ./initdb:/docker-entrypoint-initdb.d
-
-  application:
-    build: .
-    network_mode: bridge
-    container_name: web-application
-    expose:
-      - 8080
-      - 8888
+      - "postgres_data:/var/lib/postgresql/data"
     ports:
-      - 8888:8888
-      - 8080:8080
-    depends_on:
-      - postgres
-    links:
-      - postgres
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: username
+      POSTGRES_DB: bank
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    volumes:
+      - "pgadmin4_data:/var/lib/pgadmin"
+    networks:
+      - integration-test
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin4_data:
+    driver: local
+
+networks:
+  integration-test:
+    driver: bridge
