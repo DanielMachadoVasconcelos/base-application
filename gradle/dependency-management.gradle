@@ -1,0 +1,30 @@
+apply plugin: 'io.spring.dependency-management'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    springBootVersion = "2.7.0"
+    awsSdkVersion = "1.11.677"
+    avroVersion = "1.7.7"
+    swaggerVersion = "1.6.2"
+}
+
+dependencyManagement {
+
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:$springBootVersion"
+        mavenBom "com.amazonaws:aws-java-sdk-bom:$awsSdkVersion"
+    }
+
+    dependencies {
+
+        dependency 'org.slf4j:slf4j-api:1.7.36'
+        dependency 'org.apache.logging.log4j:log4j-core:2.17.1'
+        dependency 'org.apache.logging.log4j:log4j-api:2.16.0'
+
+        dependency "org.apache.avro:avro:$avroVersion"
+        dependency "io.swagger:swagger-core:$swaggerVersion"
+    }
+}
