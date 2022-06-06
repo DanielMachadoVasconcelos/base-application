@@ -11,13 +11,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,31 +27,35 @@ import java.io.IOException;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    @Autowired
-    private CustomAuthenticationProvider authProvider;
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http.csrf().disable()
-
-                .authorizeHttpRequests((authorization) -> authorization
-                        .regexMatchers(HttpMethod.POST, "/api/v1/bank-accounts").hasRole("ADMIN")
-                        .regexMatchers(HttpMethod.POST, "/api/v1/bank-accounts/*/close").hasRole("ADMIN")
-                        .regexMatchers(HttpMethod.POST, "/api/v1/bank-accounts/*/deposits").hasAnyRole("USER", "ADMIN")
-                        .regexMatchers(HttpMethod.POST, "/api/v1/bank-accounts/*/withdraws").hasAnyRole("USER", "ADMIN")
-
-                ).httpBasic()
+        return http
+                .httpBasic()
+                .and()
+                .cors().disable()
+                .csrf().disable()
+                .exceptionHandling()
+                .accessDeniedHandler(SecurityConfiguration::handle)
+                .and()
+                .authorizeHttpRequests()
+                .regexMatchers(HttpMethod.POST, "/api/v1/bank-accounts").hasRole("ADMIN")
+                .regexMatchers(HttpMethod.POST, "/api/v1/bank-accounts/*/close").hasRole("ADMIN")
+                .regexMatchers(HttpMethod.POST, "/api/v1/bank-accounts/*/deposits").hasAnyRole("USER", "ADMIN")
+                .regexMatchers(HttpMethod.POST, "/api/v1/bank-accounts/*/withdraws").hasAnyRole("USER", "ADMIN")
+                .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
                 .build();
     }
 
-    private static final void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException)
-            throws IOException, ServletException{
+    private static final void handle(HttpServletRequest request,
+                                     HttpServletResponse response,
+                                     AccessDeniedException accessDeniedException) throws IOException, ServletException {
         log.info("Error = {}, Request = {}, Response = {}",
                 accessDeniedException.getMessage(), request.getUserPrincipal(), response.getStatus());
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.sendError(HttpStatus.UNAUTHORIZED.value(), accessDeniedException.getMessage());
+        log.error("Access Denied.", accessDeniedException);
     }
 
     @Bean
@@ -63,12 +65,14 @@ public class SecurityConfiguration {
                 .withUsername("user")
                 .password(encoder.encode("password"))
                 .roles("USER")
+                .authorities("ROLE_USER")
                 .build();
 
         var admin = User
                 .withUsername("admin")
                 .password(encoder.encode("password"))
                 .roles("ADMIN")
+                .authorities("ROLE_ADMIN")
                 .build();
 
         return new InMemoryUserDetailsManager(user, admin);
