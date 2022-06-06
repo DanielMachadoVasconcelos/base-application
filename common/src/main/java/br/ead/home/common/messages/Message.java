@@ -1,4 +1,4 @@
-package br.ead.home.messages;
+package br.ead.home.common.messages;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

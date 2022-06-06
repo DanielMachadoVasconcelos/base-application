@@ -2,7 +2,7 @@ package br.ead.home.controllers;
 
 import br.ead.home.commands.DepositFundsCommand;
 import br.ead.home.commands.WithdrawFundsCommand;
-import br.ead.home.model.dto.BaseResponse;
+import br.ead.home.model.BaseResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +26,6 @@ public class BankAccountTransactionController {
                 .message("Founds Deposit transaction was successfully completed!")
                 .build();
     }
-
 
     @PostMapping(path = "{bank-account-id}/withdraws")
     public BaseResponse withdrawFunds(

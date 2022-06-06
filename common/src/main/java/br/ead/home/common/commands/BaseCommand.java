@@ -1,6 +1,6 @@
-package br.ead.home.commands;
+package br.ead.home.common.commands;
 
-import br.ead.home.messages.Message;
+import br.ead.home.common.messages.Message;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;

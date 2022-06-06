@@ -1,7 +1,7 @@
 package br.ead.home.commands;
 
-
-import br.ead.home.model.AccountType;
+import br.ead.home.common.commands.BaseCommand;
+import br.ead.home.common.model.AccountType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

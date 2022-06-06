@@ -1,0 +1,59 @@
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
+
+allprojects {
+    apply plugin: 'idea'
+
+    group 'br.ead.home'
+
+    apply from: rootProject.file("gradle/dependency-management.gradle")
+    apply from: rootProject.file("gradle/lombok.gradle")
+
+    tasks.withType(JavaCompile) {
+        options.incremental = true
+        options.encoding = 'UTF-8'
+    }
+
+    plugins.withType(ApplicationPlugin) {
+        distZip.enabled = false
+    }
+
+    sourceCompatibility = 17
+    targetCompatibility = 17
+
+    configurations {
+        all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+        all*.exclude group: 'org.slf4j', module: 'slf4j-nop'
+        all*.exclude group: 'log4j', module: 'log4j'
+    }
+
+}
+
+buildscript {
+    ext {
+        springBootVersion = "2.6.2"
+        dockerComposeVersion = "0.14.9"
+    }
+
+    repositories {
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+
+    dependencies {
+        classpath 'io.freefair.gradle:lombok-plugin:5.3.3.3'
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        showStandardStreams = true
+        events 'skipped', 'failed'
+        debug {
+            events "failed"
+            exceptionFormat "full"
+        }
+    }
+}
