@@ -6,6 +6,8 @@ import br.ead.home.model.OpenAccountResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,9 +23,11 @@ public class BankAccountController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BaseResponse openAccount(@RequestBody @Valid @NotNull OpenAccountCommand command) {
-        log.info("A bank account for customer {} is open with initial amount {}.",
-                command.getAccountHolder(), command.getOpeningBalance());
+    public BaseResponse openAccount(@AuthenticationPrincipal User user,
+                                    @RequestBody @Valid @NotNull OpenAccountCommand command) {
+
+        log.info("User {} opened a bank account for customer {} with initial amount {}.",
+                user.getUsername(), command.getAccountHolder(), command.getOpeningBalance());
 
         return OpenAccountResponse.builder()
                 .message("Bank Account was successfully opened!")
@@ -33,8 +37,11 @@ public class BankAccountController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(path = "/{bank-account-id}/close")
-    public BaseResponse closeAccount(@PathVariable("bank-account-id") @NotBlank String bankAccountId) {
-        log.info("The bank account {} was closed.", bankAccountId);
+    public BaseResponse closeAccount(@AuthenticationPrincipal User user,
+                                     @PathVariable("bank-account-id") @NotBlank String bankAccountId) {
+
+        log.info("User {} closed the bank account {}", user.getUsername(), bankAccountId);
+
         return OpenAccountResponse.builder()
                 .message("Bank Account was successfully closed!")
                 .id(UUID.randomUUID().toString())

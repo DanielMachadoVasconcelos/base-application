@@ -1,13 +1,13 @@
 version: '3'
 services:
 
-  postgres:
+  bank-database:
     image: postgres:14.1-alpine
-    container_name: postgres
+    container_name: bank-database
     networks:
       - integration-test
     volumes:
-      - "postgres_data:/var/lib/postgresql/data"
+      - "bank_data:/var/lib/postgresql/data"
     ports:
       - "5432:5432"
     environment:
@@ -20,24 +20,45 @@ services:
       timeout: 5s
       retries: 5
 
-  pgadmin:
-    container_name: pgadmin4
-    image: dpage/pgadmin4
-    volumes:
-      - "pgadmin4_data:/var/lib/pgadmin"
+  user-database:
+    image: postgres:14.1-alpine
+    container_name: user-database
     networks:
       - integration-test
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - "user_data:/var/lib/postgresql/data"
     ports:
-      - "5050:80"
+      - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: username
+      POSTGRES_DB: user
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+#  pgadmin:
+#    container_name: pgadmin4
+#    image: dpage/pgadmin4
+#    volumes:
+#      - "pgadmin4_data:/var/lib/pgadmin"
+#    networks:
+#      - integration-test
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+#      PGADMIN_DEFAULT_PASSWORD: admin
+#    ports:
+#      - "5050:80"
 
 volumes:
-  postgres_data:
+  bank_data:
     driver: local
-  pgadmin4_data:
+  user_data:
     driver: local
+#  pgadmin4_data:
+#    driver: local
 
 networks:
   integration-test:

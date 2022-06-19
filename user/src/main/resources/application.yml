@@ -1,0 +1,20 @@
+server:
+  port: 8082
+
+spring:
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    serialization:
+      write-dates-as-timestamps: false
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      format_sql: true
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/user?createDatabaseIfNotExist=true
+    username: username
+    password: password

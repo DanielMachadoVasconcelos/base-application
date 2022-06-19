@@ -1,7 +1,6 @@
 package br.ead.home.security;
 
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,7 +16,6 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -48,9 +46,9 @@ public class SecurityConfiguration {
                 .build();
     }
 
-    private static final void handle(HttpServletRequest request,
+    private static void handle(HttpServletRequest request,
                                      HttpServletResponse response,
-                                     AccessDeniedException accessDeniedException) throws IOException, ServletException {
+                                     AccessDeniedException accessDeniedException) throws IOException {
         log.info("Error = {}, Request = {}, Response = {}",
                 accessDeniedException.getMessage(), request.getUserPrincipal(), response.getStatus());
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
@@ -83,9 +81,6 @@ public class SecurityConfiguration {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    /**
-     * Not needed for the moment.
-     */
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
