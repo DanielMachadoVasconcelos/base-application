@@ -11,15 +11,8 @@ spring:
     serialization:
       write-dates-as-timestamps: false
 
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-      format_sql: true
-
-  datasource:
-    url: jdbc:postgresql://localhost:5433/user?createDatabaseIfNotExist=true
-    username: username
-    password: password
-    driver-class-name: org.postgresql.Driver
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: user

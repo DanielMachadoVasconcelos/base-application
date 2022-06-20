@@ -7,7 +7,6 @@ import br.ead.home.events.UserRegisteredEvent;
 import br.ead.home.events.UserUpdatedEvent;
 import br.ead.home.events.UserRemovedEvent;
 import br.ead.home.model.User;
-import br.ead.home.model.UserAccount;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
@@ -35,12 +34,10 @@ public class UserAggregate {
     @CommandHandler
     public UserAggregate(RegisterUserCommand command) {
 
-        UserAccount insecurityUserAccount = command.getUser().getAccount();
-        String insecurityPassword = insecurityUserAccount.getPassword();
+        String insecurityPassword = command.getUser().getPassword();
 
         User securityUser = command.getUser()
-                .withAccount(insecurityUserAccount
-                        .withPassword(passwordEncoder.encode(insecurityPassword)));
+                .withPassword(passwordEncoder.encode(insecurityPassword));
 
         AggregateLifecycle.apply(UserRegisteredEvent.builder()
                         .id(command.getId())
@@ -50,12 +47,10 @@ public class UserAggregate {
 
     @CommandHandler
     public void handle(UpdateUserCommand command) {
-        UserAccount insecurityUserAccount = command.getUser().getAccount();
-        String insecurityPassword = insecurityUserAccount.getPassword();
+        String insecurityPassword = command.getUser().getPassword();
 
         User securityUser = command.getUser()
-                .withAccount(insecurityUserAccount
-                        .withPassword(passwordEncoder.encode(insecurityPassword)));
+                .withPassword(passwordEncoder.encode(insecurityPassword));
 
         AggregateLifecycle.apply(UserUpdatedEvent.builder()
                 .id(UUID.randomUUID().toString())

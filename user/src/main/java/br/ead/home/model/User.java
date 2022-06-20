@@ -1,22 +1,28 @@
 package br.ead.home.model;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.Set;
 
 @Data
 @With
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user")
+@Document(collation = "user")
 public class User {
 
     @Id
-    private String userId;
+    private String personId;
+
     private String firstName;
     private String lastName;
+
     private String email;
-    private UserAccount account;
+    private String username;
+    private String password;
+
+    private Set<Role> roles;
 }
