@@ -16,5 +16,4 @@ public class RemoveUserCommand {
     @TargetAggregateIdentifier
     private String id;
     private User user;
-    private String password;
 }
