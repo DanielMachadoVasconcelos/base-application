@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+}
+
+group 'br.ead.home'
+version '1.0.0.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':common')
+    implementation project(':bank-account')
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    implementation ('org.axonframework:axon-spring-boot-starter:4.5.9') {
+        exclude group: 'axon-server-connector', module: 'org.axonframework'
+    }
+
+    implementation 'org.postgresql:postgresql:42.3.3'
+
+    implementation 'org.slf4j:slf4j-api'
+    implementation 'org.apache.logging.log4j:log4j-api'
+
+    implementation 'com.google.guava:guava:31.1-jre'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+}
+
+test {
+    useJUnitPlatform()
+}
