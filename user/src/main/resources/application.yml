@@ -1,6 +1,10 @@
 server:
   port: 8082
 
+axon:
+  axonserver:
+    enabled: false
+
 spring:
   jackson:
     property-naming-strategy: SNAKE_CASE
@@ -18,3 +22,4 @@ spring:
     url: jdbc:postgresql://localhost:5433/user?createDatabaseIfNotExist=true
     username: username
     password: password
+    driver-class-name: org.postgresql.Driver

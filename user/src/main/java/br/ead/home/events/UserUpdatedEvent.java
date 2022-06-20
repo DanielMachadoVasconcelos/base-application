@@ -1,4 +1,4 @@
-package br.ead.home.command;
+package br.ead.home.events;
 
 import br.ead.home.model.User;
 import lombok.AllArgsConstructor;
@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChangeUserPasswordCommand {
+public class UserUpdatedEvent {
 
-    private String commandId;
+    private String id;
     private User user;
-    private String password;
 }
