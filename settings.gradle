@@ -1,4 +1,5 @@
 include "bank-account"
 include "common"
 include 'user'
+include 'user-oauth'
 

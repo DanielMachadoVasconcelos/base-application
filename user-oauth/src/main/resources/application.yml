@@ -1,0 +1,15 @@
+server:
+  port: 8083
+
+spring:
+
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    serialization:
+      write-dates-as-timestamps: false
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: user
